@@ -4,12 +4,20 @@
   "workspaces": [
     "packages/*"
   ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:lib\" \"npm run dev:example\"",
+    "dev:lib": "cd packages/my-react-flow && npm run dev",
+    "dev:example": "cd packages/examples && npm run dev"
+  },
   "devDependencies": {
+    "@vitejs/plugin-react": "^6.0.0",
     "typescript": "~5.9.3",
-    "vite": "^8.0.0",
-    "@vitejs/plugin-react": "^6.0.0"
+    "vite": "^8.0.0"
   },
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "@panzoom/panzoom": "^4.6.1"
+  }
 }

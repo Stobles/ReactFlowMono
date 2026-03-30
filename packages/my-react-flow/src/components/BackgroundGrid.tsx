@@ -1,11 +1,6 @@
 import type { CSSProperties } from "react";
 import type { GridTypes } from "../types";
-
-const baseStyles: CSSProperties = {
-  top: 0,
-  left: 0,
-  position: "absolute",
-};
+import { useAppStore } from "../store/store";
 
 function createDotGrid(
   width: number,
@@ -17,6 +12,7 @@ function createDotGrid(
 ) {
   return Array.from({ length: width / gap + 1 }, (_, col) => {
     const x = col * gap + xOffest;
+    let sizeScaled = size * Math.max(gap / 24, 1);
     return Array.from({ length: height / gap + 1 }, (_, row) => {
       const y = row * gap + yOffset;
       return `M${x} ${y - size} l${size} ${size} l${size} ${-size} l${-size} ${-size}z`;
@@ -27,7 +23,7 @@ function createDotGrid(
 export default function BackgroundGrid({
   gap = 24,
   styles,
-  size = 0.5,
+  size = 0.7,
   type = "dots",
 }: {
   styles?: CSSProperties;
@@ -35,20 +31,28 @@ export default function BackgroundGrid({
   size?: number;
   type?: GridTypes;
 }) {
-  const width = 1024;
-  const height = 1024;
+  const [width, height] = useAppStore((s) => [s.width, s.height]);
 
-  const xOffest = width % gap;
-  const yOffset = height % gap;
+  const { x, y, scale } = useAppStore((s) => s.transform);
+
+  const scaledGap = gap * scale;
+
+  const xOffest = x % scaledGap;
+  const yOffset = y % scaledGap;
 
   const path =
     type === "dots"
-      ? createDotGrid(width, height, xOffest, yOffset, gap, size)
+      ? createDotGrid(width, height, xOffest, yOffset, scaledGap, size)
       : "";
 
   return (
-    <svg width={width} height={height} style={{ ...baseStyles, ...styles }}>
-      <path d={path} />
+    <svg
+      className="react-flow-background-grid"
+      width={width}
+      height={height}
+      style={{ ...styles }}
+    >
+      <path strokeWidth={size} d={path} />
     </svg>
   );
 }

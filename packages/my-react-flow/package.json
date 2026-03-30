@@ -13,11 +13,13 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.es.js",
-      "require": "./dist/index.es.js"
-    }
+      "require": "./dist/index.es.js",
+      "styles": "./dist/my-react-flow.css"
+    },
+    "./my-react-flow.css": "./dist/my-react-flow.css"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently \"tsc -b --watch\" \"vite build --watch\"",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -28,10 +30,13 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
+    "@types/d3-selection": "^3.0.11",
+    "@types/d3-zoom": "^3.0.8",
     "@types/node": "^24.12.0",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@vitejs/plugin-react": "^6.0.1",
+    "concurrently": "^9.2.1",
     "eslint": "^9.39.4",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.5.2",
@@ -41,5 +46,9 @@
     "vite": "^8.0.1",
     "vite-plugin-dts": "^4.5.4",
     "zustand": "^4.4.5"
+  },
+  "dependencies": {
+    "d3-selection": "^3.0.0",
+    "d3-zoom": "^3.0.0"
   }
 }
