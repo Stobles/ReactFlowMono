@@ -4,9 +4,15 @@ import Graph from "./Graph";
 import "../styles/styles.css";
 import { useAppStore } from "../store/store";
 import { useResizeObserver } from "../hooks/useResizeObserver";
-import type { Node } from "../types";
+import type { GridTypes, Node } from "../types";
 
-export default function ReactFlow({ nodes }: { nodes: Node[] }) {
+export default function ReactFlow({
+  nodes,
+  backgroundType,
+}: {
+  nodes: Node[];
+  backgroundType?: GridTypes;
+}) {
   const containerNode = useRef<HTMLDivElement | null>(null);
 
   const setSize = useAppStore((s) => s.setSize);
@@ -17,7 +23,7 @@ export default function ReactFlow({ nodes }: { nodes: Node[] }) {
 
   return (
     <div className="react-flow" ref={containerNode}>
-      <Graph nodes={nodes} />
+      <Graph nodes={nodes} backgroundType={backgroundType} />
     </div>
   );
 }

@@ -22,5 +22,5 @@ const nodes: Node[] = [
 ];
 
 export default function Basic() {
-  return <ReactFlow nodes={nodes} />;
+  return <ReactFlow nodes={nodes} backgroundType="lines" />;
 }

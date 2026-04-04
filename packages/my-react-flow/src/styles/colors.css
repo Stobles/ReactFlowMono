@@ -9,6 +9,10 @@
   --rf-color-background-grid: var(--rf-gray-200);
   --rf-color-background-node: var(--rf-white);
   --rf-color-border: var(--rf-gray-500);
+
+  --rf-color-background-line-stroke: var(--rf-gray-600);
+  --rf-color-background-dot-stroke: var(--rf-gray-700);
+
   --rf-color-text: var(--rf-black);
   --rf-shadow-node: 0 4px 10px var(--rf-gray-600);
 
