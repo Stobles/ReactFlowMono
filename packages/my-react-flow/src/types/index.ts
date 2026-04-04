@@ -6,7 +6,7 @@ export interface Coordinates {
 }
 
 export interface Node {
-  id: number;
+  id: string;
   coordinates: Coordinates;
   data?: unknown;
   styles?: CSSProperties;
@@ -15,7 +15,7 @@ export interface Node {
 }
 
 export interface NodeProps {
-  id: number;
+  id: string;
   coordinates: Coordinates;
   data?: unknown;
   styles?: CSSProperties;

@@ -50,6 +50,8 @@
 }
 
 .react-flow-node {
+  position: absolute;
+
   display: flex;
   justify-content: center;
   width: 120px;
@@ -61,4 +63,6 @@
 
   background-color: var(--rf-color-background-node);
   box-shadow: var(--rf-shadow-node);
+
+  pointer-events: all;
 }

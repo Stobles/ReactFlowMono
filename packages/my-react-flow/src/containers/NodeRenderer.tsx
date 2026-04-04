@@ -1,7 +1,8 @@
-import Node from "../components/Node";
+import BasicNode from "../components/Node";
 import { useAppStore } from "../store/store";
+import type { Node } from "../types";
 
-export default function NodeRenderer() {
+export default function NodeRenderer({ nodes }: { nodes: Node[] }) {
   const { x, y, scale } = useAppStore((s) => s.transform);
   return (
     <div
@@ -10,7 +11,14 @@ export default function NodeRenderer() {
         transform: `translate(${x}px, ${y}px) scale(${scale})`,
       }}
     >
-      <Node id={1} coordinates={{ x: 50, y: 200 }} data={"Тест"} />
+      {nodes.map((node) => (
+        <BasicNode
+          key={node.id}
+          id={node.id}
+          coordinates={node.coordinates}
+          data={node.data}
+        />
+      ))}
     </div>
   );
 }
