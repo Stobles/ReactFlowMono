@@ -1,29 +1,41 @@
+import { useEffect } from "react";
+
 import { DragDropProvider } from "@dnd-kit/react";
 import BasicNode from "../components/Nodes/Node";
 import { useAppStore } from "../store/store";
-import type { Node } from "../types";
 import DraggableWrapper from "@/components/Nodes/DraggableWrapper";
+import type { Node } from "@/types";
 
 export default function NodeRenderer() {
-  const { nodes, updateNode } = useAppStore((s) => ({
-    nodes: s.nodes,
-    updateNode: s.updateNode,
-  }));
+  const nodes = useAppStore((s) => s.myNodes);
+  const updateNode = useAppStore((s) => s.updateNode);
   const { x, y, scale } = useAppStore((s) => s.transform);
 
-  console.log(nodes);
+  console.log("renderer", nodes);
   return (
     <DragDropProvider
-      onDragMove={(event) => {
+      onDragEnd={(event) => {
         if (!event) return;
 
-        const [x, y] = [event.to?.x || 0, event.to?.y || 0];
         const node = event.operation.source?.data.node as Node;
 
-        if (!node)
-          throw new Error("Error while updating coordinates of draggable node");
+        const [x, y] = [
+          event.operation.transform?.x || 0,
+          event.operation.transform?.y || 0,
+        ];
 
-        node.coordinates = { x, y };
+        console.log(x, y, node.coordinates);
+
+        const newCoords = {
+          x: node.coordinates.x + x,
+          y: node.coordinates.y + y,
+        };
+
+        console.log(event.operation.source?.data.id);
+
+        updateNode(node.id, {
+          coordinates: newCoords,
+        });
       }}
     >
       <div
@@ -33,7 +45,7 @@ export default function NodeRenderer() {
         }}
       >
         {nodes.map((node) => (
-          <DraggableWrapper id={node.id}>
+          <DraggableWrapper id={node.id} node={node}>
             <BasicNode
               key={node.id}
               id={node.id}

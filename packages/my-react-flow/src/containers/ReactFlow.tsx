@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import Graph from "./Graph";
 
 import "../styles/styles.css";
@@ -15,15 +15,20 @@ export default function ReactFlow({
 }) {
   const containerNode = useRef<HTMLDivElement | null>(null);
 
+  const setNodes = useAppStore((s) => s.setNodes);
   const setSize = useAppStore((s) => s.setSize);
 
   useResizeObserver([containerNode], (entry) => {
     setSize(entry.contentRect.width, entry.contentRect.height);
   });
 
+  useEffect(() => {
+    setNodes(nodes);
+  }, []);
+
   return (
     <div className="react-flow" ref={containerNode}>
-      <Graph nodes={nodes} backgroundType={backgroundType} />
+      <Graph backgroundType={backgroundType} />
     </div>
   );
 }
