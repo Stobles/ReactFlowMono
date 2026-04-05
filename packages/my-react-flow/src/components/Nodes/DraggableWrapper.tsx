@@ -15,13 +15,14 @@ export default function DraggableWrapper({
 }) {
   const { ref } = useDraggable({
     id: `draggable-${id}`,
+    feedback: "move",
     data: {
       node,
     },
   });
 
   return (
-    <div ref={ref} style={{ transition: "none", animation: "none", ...styles }}>
+    <div ref={ref} style={{ ...styles }}>
       {children}
     </div>
   );

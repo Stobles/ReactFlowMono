@@ -1,9 +1,8 @@
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import BackgroundGrid from "../components/BackgroundGrid";
 import { useZoom } from "../hooks/useZoom";
 import NodeRenderer from "./NodeRenderer";
-import type { GridTypes, Node } from "../types";
-import { useAppStore } from "@/store/store";
+import type { GridTypes } from "../types";
 
 export default function Graph({
   backgroundType,

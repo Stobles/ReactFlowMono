@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useRef } from "react";
 
 import { DragDropProvider } from "@dnd-kit/react";
 import BasicNode from "../components/Nodes/Node";
@@ -8,6 +8,7 @@ import type { Node } from "@/types";
 import { Feedback } from "@dnd-kit/dom";
 
 export default function NodeRenderer() {
+  const nodesLayerRef = useRef<HTMLDivElement>(null);
   const nodes = useAppStore((s) => s.myNodes);
   const updateNode = useAppStore((s) => s.updateNode);
   const { x, y, scale } = useAppStore((s) => s.transform);
@@ -16,26 +17,29 @@ export default function NodeRenderer() {
     <DragDropProvider
       plugins={(defaults) => [
         ...defaults,
-        Feedback.configure({ dropAnimation: null }),
+        Feedback.configure({
+          dropAnimation: null,
+
+          // Клон/переносимый элемент остаётся в том же фрейме, что и канвас с zoom,
+          // иначе getFrameTransform даёт scale 1 и превью «плывёт» относительно курсора.
+          rootElement: () => nodesLayerRef.current ?? document.body,
+        }),
       ]}
       onDragEnd={(event) => {
         if (!event) return;
 
         const node = event.operation.source?.data.node as Node;
+        if (!node) return;
 
-        const [x, y] = [
-          event.operation.transform?.x || 0,
-          event.operation.transform?.y || 0,
-        ];
-
-        console.log(x, y, node.coordinates);
-
+        const offsetX = event.operation.transform?.x ?? 0;
+        const offsetY = event.operation.transform?.y ?? 0;
+        const k = scale;
+        // transform из операции — в координатах экрана; координаты ноды — в локальном
+        // пространстве слоя до CSS scale().
         const newCoords = {
-          x: node.coordinates.x + x,
-          y: node.coordinates.y + y,
+          x: node.coordinates.x + offsetX / k,
+          y: node.coordinates.y + offsetY / k,
         };
-
-        console.log(event.operation.source?.data.id);
 
         updateNode(node.id, {
           coordinates: newCoords,
@@ -43,8 +47,9 @@ export default function NodeRenderer() {
       }}
     >
       <div
+        ref={nodesLayerRef}
         className="react-flow-nodes"
-        style={{ transform: `translate(${x}px, ${y}px) scale(${scale})` }}
+        style={{ willChange: "transform" }}
       >
         {nodes.map((node) => (
           <DraggableWrapper
@@ -52,6 +57,7 @@ export default function NodeRenderer() {
             id={node.id}
             node={node}
             styles={{
+              transform: `translate(${x}px, ${y}px) scale(${scale}) translateZ(0)`,
               transformOrigin: "0 0",
             }}
           >
