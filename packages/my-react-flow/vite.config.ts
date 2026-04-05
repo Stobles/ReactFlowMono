@@ -5,6 +5,11 @@ import dts from "vite-plugin-dts";
 
 // https://vite.dev/config/
 export default defineConfig({
+  resolve: {
+    alias: {
+      "@/": resolve(__dirname, "./src"),
+    },
+  },
   plugins: [
     react(),
     dts({
@@ -14,6 +19,7 @@ export default defineConfig({
   ],
   build: {
     emptyOutDir: false,
+    sourcemap: true,
     lib: {
       entry: resolve(__dirname, "src/index.ts"),
       name: "my-react-flow",

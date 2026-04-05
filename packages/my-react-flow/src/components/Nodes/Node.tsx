@@ -1,5 +1,5 @@
-import { isReactNode } from "../lib/isReactNode";
-import type { NodeProps } from "../types";
+import { isReactNode } from "@/lib/isReactNode";
+import type { NodeProps } from "@/types";
 
 export default function BasicNode({ coordinates, data, styles }: NodeProps) {
   if (!isReactNode(data)) return;
