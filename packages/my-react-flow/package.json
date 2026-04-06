@@ -48,6 +48,7 @@
     "zustand": "^4.4.5"
   },
   "dependencies": {
+    "@dnd-kit/dom": "^0.3.2",
     "@dnd-kit/react": "^0.3.2",
     "d3-selection": "^3.0.0",
     "d3-zoom": "^3.0.0"

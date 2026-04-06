@@ -5,15 +5,19 @@ import BasicNode from "../components/Nodes/Node";
 import { useAppStore } from "../store/store";
 import DraggableWrapper from "@/components/Nodes/DraggableWrapper";
 import type { Node } from "@/types";
+import { Feedback } from "@dnd-kit/dom";
 
 export default function NodeRenderer() {
   const nodes = useAppStore((s) => s.myNodes);
   const updateNode = useAppStore((s) => s.updateNode);
   const { x, y, scale } = useAppStore((s) => s.transform);
 
-  console.log("renderer", nodes);
   return (
     <DragDropProvider
+      plugins={(defaults) => [
+        ...defaults,
+        Feedback.configure({ dropAnimation: null }),
+      ]}
       onDragEnd={(event) => {
         if (!event) return;
 
@@ -40,12 +44,17 @@ export default function NodeRenderer() {
     >
       <div
         className="react-flow-nodes"
-        style={{
-          transform: `translate(${x}px, ${y}px) scale(${scale})`,
-        }}
+        style={{ transform: `translate(${x}px, ${y}px) scale(${scale})` }}
       >
         {nodes.map((node) => (
-          <DraggableWrapper id={node.id} node={node}>
+          <DraggableWrapper
+            key={node.id}
+            id={node.id}
+            node={node}
+            styles={{
+              transformOrigin: "0 0",
+            }}
+          >
             <BasicNode
               key={node.id}
               id={node.id}
